@@ -29,8 +29,8 @@ if [[ "$INSTALL_PYTHON" =~ ^[yY]$ ]]; then
 	echo "$AVAILABLE_VERSIONS"
 	
 	# Запрос версии Python у пользователя
-	read -p "Enter the version of Python you want to install (for example, 10): " PYTHON_VERSION
-	PYTHON_VERSION=${PYTHON_VERSION:-10}
+	read -p "Enter the version of Python you want to install (for example, 3.10): " PYTHON_VERSION
+	PYTHON_VERSION=${PYTHON_VERSION:-3.10}
 
 	# Проверяем, существует ли введенная версия
 	if echo "$AVAILABLE_VERSIONS" | grep -q "$PYTHON_VERSION"; then
