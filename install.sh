@@ -21,6 +21,8 @@ read -p "Установить Teamspeak3? (y/n): " INSTALL_C
 INSTALL_C=${INSTALL_C:-y}  # Устанавливаем значение по умолчанию "y"
 
 if [[ "$INSTALL_C" =~ ^[yY]$ ]]; then
+	apt-get update
+	apt-get install -y wget
 	bash <(curl -Ls https://raw.githubusercontent.com/Html-React/vps/refs/heads/main/install_teamspeak3_server.sh)
 fi
 
