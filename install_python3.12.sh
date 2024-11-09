@@ -10,9 +10,6 @@ read -p "Установить Python? (y/n): " INSTALL_PYTHON
 INSTALL_PYTHON=${INSTALL_PYTHON:-y}  # Устанавливаем значение по умолчанию "y"
 
 if [[ "$INSTALL_PYTHON" =~ ^[yY]$ ]]; then
-	# Запрос версии Python у пользователя
-	read -p "Enter the version of Python you want to install (for example, 3.10): " PYTHON_VERSION
-	PYTHON_VERSION=${PYTHON_VERSION:-3.10}
 
 	# Установка необходимых зависимостей
 	apt install -y software-properties-common
@@ -22,7 +19,7 @@ if [[ "$INSTALL_PYTHON" =~ ^[yY]$ ]]; then
 
 	# Включите в список системных репозиториев еще один репозиторий для Python
 	add-apt-repository -y ppa:deadsnakes/ppa
-	apt update -y
+	apt update -y	
 
 	# Получаем список доступных версий Python
 	AVAILABLE_VERSIONS=$(apt-cache search python3.1 | grep -oP 'python3\.\d+' | sed 's/python3\.//' | sort -u)
@@ -30,6 +27,10 @@ if [[ "$INSTALL_PYTHON" =~ ^[yY]$ ]]; then
 	# Выводим список доступных версий
 	echo "Доступные версии Python:"
 	echo "$AVAILABLE_VERSIONS"
+	
+	# Запрос версии Python у пользователя
+	read -p "Enter the version of Python you want to install (for example, 10): " PYTHON_VERSION
+	PYTHON_VERSION=${PYTHON_VERSION:-10}
 
 	# Проверяем, существует ли введенная версия
 	if echo "$AVAILABLE_VERSIONS" | grep -q "$PYTHON_VERSION"; then
