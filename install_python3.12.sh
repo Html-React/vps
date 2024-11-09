@@ -20,7 +20,7 @@ AVAILABLE_VERSIONS=$(apt-cache show python3 | grep -oP 'Version: \K[0-9]+\.[0-9]
 # Проверяем, существует ли введенная версия
 if echo "$AVAILABLE_VERSIONS" | grep -q "$PYTHON_VERSION"; then
     echo "Version $PYTHON_VERSION is available. Installing..."
-    sudo apt-get install -y python$PYTHON_VERSION python$PYTHON_VERSION-venv python$PYTHON_VERSION-pip
+    apt-get install -y python$PYTHON_VERSION python$PYTHON_VERSION-venv python$PYTHON_VERSION-pip
 else
     echo "Version $PYTHON_VERSION not found. Installing the latest available version..."
     LATEST_VERSION=$(echo "$AVAILABLE_VERSIONS" | sort -V | tail -n 1)
