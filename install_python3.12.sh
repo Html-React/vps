@@ -26,6 +26,10 @@ if [[ "$INSTALL_PYTHON" =~ ^[yY]$ ]]; then
 
 	# Получаем список доступных версий Python
 	AVAILABLE_VERSIONS=$(apt-cache show python3 | grep -oP 'Version: \K[0-9]+\.[0-9]+')
+	
+	# Выводим список доступных версий
+	echo "Доступные версии Python:"
+	echo "$AVAILABLE_VERSIONS"
 
 	# Проверяем, существует ли введенная версия
 	if echo "$AVAILABLE_VERSIONS" | grep -q "$PYTHON_VERSION"; then
@@ -36,7 +40,7 @@ if [[ "$INSTALL_PYTHON" =~ ^[yY]$ ]]; then
 		echo "Version $PYTHON_VERSION not found. Installing the latest available version..."
 		LATEST_VERSION=$(echo "$AVAILABLE_VERSIONS" | sort -V | tail -n 1)
 		echo "Latest version is $LATEST_VERSION. Installing..."
-		apt-get install -y python$LATEST_VERSION python$LATEST_VERSION-venv python$LATEST_VERSION-pip
+		apt-get install -y python$LATEST_VERSION python$LATEST_VERSION-venv python3-pip
 		PYTHON_VERSION=$LATEST_VERSION
 	fi
 
