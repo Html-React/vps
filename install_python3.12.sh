@@ -8,7 +8,7 @@ PYTHON_VERSION=${PYTHON_VERSION:-3.10}
 apt install -y software-properties-common
 
 # Обновите все имеющиеся ПО
-apt-get update -y && sudo apt upgrade -y
+apt-get update -y && apt upgrade -y
 
 # Включите в список системных репозиториев еще один репозиторий для Python
 add-apt-repository -y ppa:deadsnakes/ppa
@@ -34,3 +34,4 @@ update-alternatives --install /usr/bin/python python /usr/bin/python$PYTHON_VERS
 
 # Настроим приоритет для python
 update-alternatives --config python
+
