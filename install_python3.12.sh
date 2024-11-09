@@ -1,37 +1,48 @@
 #!/bin/bash
 
-# Запрос версии Python у пользователя
-read -p "Enter the version of Python you want to install (for example, 3.10): " PYTHON_VERSION
-PYTHON_VERSION=${PYTHON_VERSION:-3.10}
+apt install language-pack-ru
+apt install locales
+locale-gen en_US.UTF-8
+update-locale LANG=en_US.UTF-8
+timedatectl set-timezone Europe/Samara
 
-# Установка необходимых зависимостей
-apt install -y software-properties-common
+read -p "Установить Python? (y/n): " INSTALL_PYTHON
+INSTALL_PYTHON=${INSTALL_PYTHON:-y}  # Устанавливаем значение по умолчанию "y"
 
-# Обновите все имеющиеся ПО
-apt-get update -y && apt upgrade -y
+if [[ "$INSTALL_PYTHON" =~ ^[yY]$ ]]; then
+	# Запрос версии Python у пользователя
+	read -p "Enter the version of Python you want to install (for example, 3.10): " PYTHON_VERSION
+	PYTHON_VERSION=${PYTHON_VERSION:-3.10}
 
-# Включите в список системных репозиториев еще один репозиторий для Python
-add-apt-repository -y ppa:deadsnakes/ppa
-apt update -y
+	# Установка необходимых зависимостей
+	apt install -y software-properties-common
 
-# Получаем список доступных версий Python
-AVAILABLE_VERSIONS=$(apt-cache show python3 | grep -oP 'Version: \K[0-9]+\.[0-9]+')
+	# Обновите все имеющиеся ПО
+	apt-get update -y && apt upgrade -y
 
-# Проверяем, существует ли введенная версия
-if echo "$AVAILABLE_VERSIONS" | grep -q "$PYTHON_VERSION"; then
-    echo "Version $PYTHON_VERSION is available. Installing..."
-    apt-get install -y python$PYTHON_VERSION python$PYTHON_VERSION-venv python$PYTHON_VERSION-pip
-else
-    echo "Version $PYTHON_VERSION not found. Installing the latest available version..."
-    LATEST_VERSION=$(echo "$AVAILABLE_VERSIONS" | sort -V | tail -n 1)
-    echo "Latest version is $LATEST_VERSION. Installing..."
-    apt-get install -y python$LATEST_VERSION python$LATEST_VERSION-venv python$LATEST_VERSION-pip
-    PYTHON_VERSION=$LATEST_VERSION
+	# Включите в список системных репозиториев еще один репозиторий для Python
+	add-apt-repository -y ppa:deadsnakes/ppa
+	apt update -y
+
+	# Получаем список доступных версий Python
+	AVAILABLE_VERSIONS=$(apt-cache show python3 | grep -oP 'Version: \K[0-9]+\.[0-9]+')
+
+	# Проверяем, существует ли введенная версия
+	if echo "$AVAILABLE_VERSIONS" | grep -q "$PYTHON_VERSION"; then
+		echo "Version $PYTHON_VERSION is available. Installing..."
+		apt-get install -y python$PYTHON_VERSION python$PYTHON_VERSION-venv python$PYTHON_VERSION-pip
+	else
+		echo "Version $PYTHON_VERSION not found. Installing the latest available version..."
+		LATEST_VERSION=$(echo "$AVAILABLE_VERSIONS" | sort -V | tail -n 1)
+		echo "Latest version is $LATEST_VERSION. Installing..."
+		apt-get install -y python$LATEST_VERSION python$LATEST_VERSION-venv python$LATEST_VERSION-pip
+		PYTHON_VERSION=$LATEST_VERSION
+	fi
+
+	# Добавление Python версии в update-alternatives, если она еще не добавлена
+	update-alternatives --install /usr/bin/python python /usr/bin/python$PYTHON_VERSION 1
+
+	# Настроим приоритет для python
+	update-alternatives --set python /usr/bin/python$PYTHON_VERSION
 fi
-
-# Добавление Python версии в update-alternatives, если она еще не добавлена
-update-alternatives --install /usr/bin/python python /usr/bin/python$PYTHON_VERSION 1
-
-# Настроим приоритет для python
-update-alternatives --config python
 
