@@ -1,10 +1,10 @@
 #!/bin/bash
 
-apt install language-pack-ru
-apt install locales
+apt install -y language-pack-ru language-pack-ru-base locales
 locale-gen en_US.UTF-8
 update-locale LANG=en_US.UTF-8
 timedatectl set-timezone Europe/Samara
+
 
 read -p "Установить Python? (y/n): " INSTALL_PYTHON
 INSTALL_PYTHON=${INSTALL_PYTHON:-y}  # Устанавливаем значение по умолчанию "y"
