@@ -22,7 +22,7 @@ if [[ "$INSTALL_PYTHON" =~ ^[yY]$ ]]; then
 	apt update -y	
 
 	# Получаем список доступных версий Python
-	AVAILABLE_VERSIONS=$(apt-cache search python3.1 | grep -oP 'python\.\d+' | sed 's/python\.//' | sort -u)
+	AVAILABLE_VERSIONS=$(apt-cache search python3.1 | grep -oP 'python3\.\d{2}' | sed 's/python3\./3./' | sort -u)
 	apt-cache search python3.1
 	# Выводим список доступных версий
 	echo "Доступные версии Python:"
