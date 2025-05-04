@@ -9,7 +9,7 @@
   bash <(curl -Ls https://raw.githubusercontent.com/Html-React/vps/refs/heads/main/install.sh)
 ```
 
-Certbot
+Certbot - это бесплатный инструмент, созданный Electronic Frontier Foundation (EFF), который позволяет автоматически получать и продлевать SSL/TLS-сертификаты от Let's Encrypt. Эти сертификаты используются для шифрования соединений по HTTPS.
 Чтобы установить и использовать Certbot:
 
 ```code
