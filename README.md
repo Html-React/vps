@@ -9,7 +9,7 @@
   bash <(curl -Ls https://raw.githubusercontent.com/Html-React/vps/refs/heads/main/install.sh)
 ```
 
-## Инструкции для получения ssl сертификата
+## Инструкции для получения ssl сертификата для домена
 
 [Инструкция для Ngnix](Ngnix%20ssl%20%D1%81%D0%B5%D1%80%D1%82%D0%B8%D1%84%D0%B8%D0%BA%D0%B0%D1%82.md)
 
