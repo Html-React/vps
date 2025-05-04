@@ -1,4 +1,4 @@
-# Разварачиваем на VPS/VDS:
+# Разворачиваем на VPS/VDS:
 - Python
 - Teamspeak3
 - OpenVpn
