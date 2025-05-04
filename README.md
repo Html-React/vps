@@ -11,7 +11,7 @@
 
 ## Инструкции для получения ssl сертификата
 
-[Инструкция для Apache](README_apache.md)
+[Инструкция для Ngnix](Ngnix%20ssl%20%D1%81%D0%B5%D1%80%D1%82%D0%B8%D1%84%D0%B8%D0%BA%D0%B0%D1%82.md)
 
-[Инструкция для Apache](README_apache.md)
+[Инструкция для Apache](Apache%20ssl%20%D1%81%D0%B5%D1%80%D1%82%D0%B8%D1%84%D0%B8%D0%BA%D0%B0%D1%82.md)
 
