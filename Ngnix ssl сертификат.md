@@ -93,6 +93,52 @@ Let's Encrypt сертификаты действуют 90 дней, Certbot н�
 ```
 
 ---
+## Файл конфиг
+```
+# HTTP > HTTPS
+server {
+    listen 80;
+    listen [::]:80;
+    server_name devkul.space www.devkul.space;
+    return 301 https://$host$request_uri;
+}
+
+# Фоллбек от Xray (TCP без SSL!)
+server {
+    listen 10443 http2;
+    listen [::]:10443 http2;
+    server_name devkul.space www.devkul.space;
+
+    root /var/www/dev;
+    index index.html index.htm;
+
+    # Важно! HSTS
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+
+    # Защита скрытых файлов
+    location ~ /\.(?!well-known).* {
+        deny all;
+    }
+
+    location / {
+        try_files $uri $uri/ =404;
+
+        if ($request_uri ~ ^(.+)/+$) {
+            return 301 $scheme://$host$1;
+        }
+    }
+
+    error_page 404 /404.html;
+    location = /404.html {
+        internal;
+    }
+
+    access_log /var/log/nginx/devkul10443.access.log;
+    error_log  /var/log/nginx/devkul10443.error.log;
+}
+```
+
+
 
 ## 📞 Поддержка
 
