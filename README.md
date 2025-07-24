@@ -17,4 +17,4 @@
 
 ## Создаем SSH
 
-[Инструкция для SSH]()
+[Инструкция для SSH](https://raw.githubusercontent.com/Html-React/vps/refs/heads/main/ssh.md)
