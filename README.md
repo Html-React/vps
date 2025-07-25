@@ -21,4 +21,4 @@
 
 ## Разворачиваем с помощью Ansible на VPS/VDS VPN: 3x-UI-Web Panel -> Nginx -> Сайт подложку -> Для конкретного домена с получением SSL сертификата
 
-[Инструкция для SSH](ssh.md)
+[Инструкция для SSH](ansible-install-vpn.sh)
