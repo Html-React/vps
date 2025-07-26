@@ -69,13 +69,13 @@ sudo certbot certonly --force-renewal -d example.com
 
 # ✅ Примеры команд
 
-- Получить сертификат через nginx
+### Получить сертификат через nginx
  ```sudo certbot --nginx -d example.com```
-- Только получить (не настраивать nginx)
+### Только получить (не настраивать nginx)
  ```sudo certbot certonly --standalone -d example.com```
-- Получить через DNS Cloudflare
+### Получить через DNS Cloudflare
  ```sudo certbot certonly --dns-cloudflare --dns-cloudflare-credentials /root/cloudflare.ini -d example.com```
-- Автоматическое продление
+### Автоматическое продление
  ```sudo certbot renew```
-- Удалить сертификат
+### Удалить сертификат
  ```sudo certbot delete --cert-name example.com```
