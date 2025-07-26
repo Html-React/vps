@@ -15,6 +15,12 @@ sudo certbot certonly --manual -d example.com
 certbot certonly --nginx -d test.devkul.space --non-interactive --agree-tos --force-renewal -m your-email@example.com
 
 ```
+certonly - запрашивает только сертификат — не настраивает автоматом HTTPS в nginx (хотя и использует его для валидации).
+
+--nginx - Использует Nginx-плагин Certbot'а для автоматической проверки домена и управления валидацией (через HTTP-01 challenge).
+
+-d test.devkul.space - Домен, для которого нужен сертификат. Можно указывать несколько -d (для поддоменов).
+
 --non-interactive — отключает все запросы к пользователю.
 
 --agree-tos — автоматически принимает условия обслуживания Let's Encrypt.
