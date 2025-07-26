@@ -48,34 +48,56 @@ sudo certbot certonly --force-renewal -d example.com
 # 🟪 🧪 Тестирование и отладка
 
 ## Проверить доступность Certbot-сервера
-```sudo certbot --version```
+```
+sudo certbot --version
+```
 
 ## Получить сертификат, но не сохранять (для тестов)
-```sudo certbot certonly --staging --standalone -d example.com```
+```
+sudo certbot certonly --staging --standalone -d example.com
+```
 
 ## Включить подробный вывод
-```sudo certbot --nginx -d example.com --debug-challenges --verbose```
+```
+sudo certbot --nginx -d example.com --debug-challenges --verbose
+```
 
 # 🟥 🔒 Автоматизация и хуки
 
 ## Хук при успешном обновлении
-```--deploy-hook "/usr/bin/systemctl reload nginx"```
+```
+--deploy-hook "/usr/bin/systemctl reload nginx"
+```
 
 ## Хук до обновления
-```--pre-hook "systemctl stop nginx"```
+```
+--pre-hook "systemctl stop nginx"
+```
 
 ## Хук после обновления
-```--post-hook "systemctl start nginx"```
+```
+--post-hook "systemctl start nginx"
+```
 
 # ✅ Примеры команд
 
 ### Получить сертификат через nginx
- ```sudo certbot --nginx -d example.com```
+ ```
+ sudo certbot --nginx -d example.com
+```
 ### Только получить (не настраивать nginx)
- ```sudo certbot certonly --standalone -d example.com```
+ ```
+ sudo certbot certonly --standalone -d example.com
+```
 ### Получить через DNS Cloudflare
- ```sudo certbot certonly --dns-cloudflare --dns-cloudflare-credentials /root/cloudflare.ini -d example.com```
+ ```
+ sudo certbot certonly --dns-cloudflare --dns-cloudflare-credentials /root/cloudflare.ini -d example.com
+```
 ### Автоматическое продление
- ```sudo certbot renew```
+ ```
+ sudo certbot renew
+```
 ### Удалить сертификат
- ```sudo certbot delete --cert-name example.com```
+ ```
+ sudo certbot delete --cert-name example.com
+```
