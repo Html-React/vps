@@ -96,7 +96,9 @@ sudo certbot --nginx -d example.com --debug-challenges --verbose
 ```
 --post-hook "systemctl start nginx"
 ```
-# ✅ 1. Проверь cron или systemd таймер
+# Проверить работу автоматического обновления
+
+## ✅ 1. Проверь cron или systemd таймер
 
 ### Certbot может быть установлен через:
 
@@ -132,7 +134,7 @@ cat /etc/cron.d/certbot
 
 Это означает, что certbot renew запускается каждые 12 часов.
 
-# ✅ 2. Проверь журнал обновлений
+## ✅ 2. Проверь журнал обновлений
 
 Certbot ведёт журнал всех попыток обновления.
 ```
@@ -150,7 +152,7 @@ sudo zgrep "renew" /var/log/letsencrypt/*.log*
 
     Были ли ошибки
 
-# ✅ 3. Проверь, когда сертификат истекает
+## ✅ 3. Проверь, когда сертификат истекает
 ```
 sudo certbot certificates
 ```
