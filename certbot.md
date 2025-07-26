@@ -10,7 +10,7 @@ sudo certbot certonly --nginx -d example.com
 sudo certbot certonly --standalone -d example.com
 sudo certbot certonly --manual -d example.com
 ```
-# Команда для автоматического запроса сертификата через nginx:
+## Команда для автоматического запроса сертификата через nginx:
 ```
 certbot certonly --nginx -d test.devkul.space --non-interactive --agree-tos --force-renewal -m your-email@example.com
 
