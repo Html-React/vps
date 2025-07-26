@@ -10,6 +10,18 @@ sudo certbot certonly --nginx -d example.com
 sudo certbot certonly --standalone -d example.com
 sudo certbot certonly --manual -d example.com
 ```
+# Команда для автоматического запроса сертификата через nginx:
+```
+certbot certonly --nginx -d test.devkul.space --non-interactive --agree-tos --force-renewal -m your-email@example.com
+
+```
+--non-interactive — отключает все запросы к пользователю.
+
+--agree-tos — автоматически принимает условия обслуживания Let's Encrypt.
+
+--force-renewal — принудительно обновляет сертификат, даже если он ещё действителен.
+
+-m your-email@example.com — обязательный адрес электронной почты (для уведомлений Let's Encrypt).
 ## Через DNS (API)
 ```
 sudo certbot certonly --dns-cloudflare --dns-cloudflare-credentials /path/to/creds.ini -d example.com
