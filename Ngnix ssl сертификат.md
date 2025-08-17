@@ -66,6 +66,7 @@ sudo systemctl reload nginx
 openssl s_client -connect devkul.com:443 -servername devkul.space </dev/null | openssl x509 -noout -issuer -subject -dates
 ```
 Вывод пример:
+```
     depth=2 C = US, O = Internet Security Research Group, CN = ISRG Root X1
     verify return:1
     depth=1 C = US, O = Let's Encrypt, CN = E6
@@ -77,6 +78,7 @@ openssl s_client -connect devkul.com:443 -servername devkul.space </dev/null | o
     subject=CN = devkul.space
     notBefore=Jul 19 17:05:26 2025 GMT
     notAfter=Oct 17 17:05:25 2025 GMT
+```
 
 Перейдите в браузере по адресам:
 - https://devkul.com
