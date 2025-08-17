@@ -63,7 +63,7 @@ sudo systemctl reload nginx
 ## 🌍 Проверка HTTPS
 
 ```
-openssl s_client -connect devkul.com:443 -servername devkul.space </dev/null | openssl x509 -noout -issuer -subject -dates
+openssl s_client -connect devkul.com:443 -servername devkul.com </dev/null | openssl x509 -noout -issuer -subject -dates
 ```
 Вывод пример:
 ```
