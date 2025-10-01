@@ -83,7 +83,23 @@ ssh adminuser@server_ip
 
 ---
 
-## 6. Проверка безопасности
+## 6. Ограничение root через PAM (дополнительная защита)
+
+Откройте PAM SSH конфиг:
+```
+sudo nano /etc/pam.d/sshd
+```
+Добавьте строку в начало:
+```
+auth    required    pam_listfile.so item=user sense=deny file=/etc/ssh/denied_users onerr=succeed
+```
+Создайте файл /etc/ssh/denied_users:
+```
+root
+```
+После этого root не сможет подключаться через SSH.
+
+## 7. Проверка безопасности
 
 - Попытка входа под root:
 ```bash
