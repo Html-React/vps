@@ -61,10 +61,7 @@ sudo nano /etc/ssh/root_banner.txt
 ```bash
 sudo passwd -l root               # блокируем пароль root
 sudo usermod -s /usr/sbin/nologin root  # запрещаем вход в shell
-```
-или для Ubuntu:
-```
-sudo usermod -s /bin/false root
+sudo usermod -s /bin/false root # или для Ubuntu
 ```
 
 > Root доступен через `sudo` пользователя adminuser.
