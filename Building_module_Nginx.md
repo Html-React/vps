@@ -28,7 +28,13 @@ tar zxvf nginx-1.29.2.tar.gz
 
 Скачать исходник модуля
 https://github.com/nginx/nginx-acme
-Предположим, что исходники модуля находятся в /usr/local/src/nginx-acme-module.
+```
+cd /usr/local/src
+mkdir -p nginx-acme-module
+wget http://github.com/nginx/nginx-acme/releases/download/v0.1.1/nginx-acme-0.1.1.tar.gz
+tar -xzvf nginx-acme-0.1.1.tar.gz -C nginx-acme-module --strip-components=1
+```
+Теперь исходники модуля находятся в /usr/local/src/nginx-acme-module.
 
 ```
 # Путь к исходникам модуля
