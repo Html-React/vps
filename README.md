@@ -24,3 +24,6 @@
 ## Настройке безопасного доступа на Ubuntu сервере с запретом прямого входа root
 
 [Инструкция](secure_ubuntu_root_setup.md)
+
+# Сборка модуля libnginx_acme.so для Nginx
+[Инструкция](Building_module_Nginx.md)
