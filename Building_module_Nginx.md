@@ -26,6 +26,8 @@ tar zxvf nginx-1.29.2.tar.gz
 
 ## 3. Сборка модуля ACME (готовый блок команд)
 
+Скачать исходник модуля
+https://github.com/nginx/nginx-acme
 Предположим, что исходники модуля находятся в /usr/local/src/nginx-acme-module.
 
 ```
