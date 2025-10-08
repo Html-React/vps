@@ -45,7 +45,7 @@ tar -xzvf nginx-acme-0.1.1.tar.gz -C nginx-acme-module --strip-components=1
 ```
 # Сборка модуля
 cd /usr/local/src/nginx-1.29.2
-./configure --with-compat --add-dynamic-module=/usr/local/src/nginx-acme-module
+./configure --with-compat --add-dynamic-module=/usr/local/src/nginx-acme-module/ --with-http_ssl_module
 make clean
 make modules
 cp objs/ngx_modules/ngx_http_acme_module.so /usr/local/nginx/modules/
