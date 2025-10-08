@@ -9,8 +9,14 @@
 Установите необходимые зависимости:
 
 ```bash
-sudo apt update
-sudo apt install -y build-essential libpcre3 libpcre3-dev zlib1g-dev libssl-dev wget
+apt update
+apt install -y pkg-config clang libclang-dev build-essential libpcre3 libpcre3-dev zlib1g-dev libssl-dev wget
+# Установка cargo — менеджер сборки Rust
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+# После установки, добавьте cargo в PATH:
+source $HOME/.cargo/env
+cargo --version
+rustc --version
 ```
 
 ## 2. Скачать исходники Nginx
@@ -37,18 +43,12 @@ tar -xzvf nginx-acme-0.1.1.tar.gz -C nginx-acme-module --strip-components=1
 Теперь исходники модуля находятся в /usr/local/src/nginx-acme-module.
 
 ```
-# Путь к исходникам модуля
-ACME_MODULE_DIR=/usr/local/src/nginx-acme-module
-
-# Путь к исходникам Nginx
-NGINX_SRC_DIR=/usr/local/src/nginx-1.29.2
-
 # Сборка модуля
-cd $ACME_MODULE_DIR
+cd /usr/local/src/nginx-1.29.2
+./configure --with-compat --add-dynamic-module=/usr/local/src/nginx-acme-module
 make clean
-$NGINX_SRC_DIR/configure --with-compat --add-dynamic-module=$ACME_MODULE_DIR
-make
-sudo make install
+make modules
+cp objs/ngx_modules/ngx_http_acme_module.so /usr/local/nginx/modules/
 
 # Проверка конфигурации nginx
 sudo nginx -t
