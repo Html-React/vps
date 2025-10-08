@@ -45,10 +45,13 @@ tar -xzvf nginx-acme-0.1.1.tar.gz -C nginx-acme-module --strip-components=1
 ```
 # Сборка модуля
 cd /usr/local/src/nginx-1.29.2
+# Отчистка от старых версий
+make clean 
 ./configure --with-compat --add-dynamic-module=/usr/local/src/nginx-acme-module/ --with-http_ssl_module
-make clean
 make modules
-cp objs/ngx_modules/ngx_http_acme_module.so /usr/local/nginx/modules/
+# Если make modules не запуститься то просто
+make
+cp objs/ngx_http_acme_module.so /usr/lib/nginx/modules/
 
 # Проверка конфигурации nginx
 sudo nginx -t
@@ -56,4 +59,12 @@ sudo nginx -t
 # Перезапуск nginx
 sudo systemctl restart nginx
 sudo systemctl status nginx
+```
+
+## Дополнительно
+Если systemctl status nginx выдает ошибку "nginx.service: Can't open PID file /run/nginx.pid (yet?) after start: Operation not permitted"
+```
+# Добавить строку в /usr/lib/systemd/system/nginx.service
+[Service]
+ExecStartPost=/bin/sleep 1
 ```
