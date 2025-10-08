@@ -10,7 +10,7 @@
 
 ```bash
 apt update
-apt install -y pkg-config clang libclang-dev build-essential libpcre3 libpcre3-dev zlib1g-dev libssl-dev wget
+apt install -y pkg-config clang libclang-dev build-essential libpcre3 libpcre3-dev zlib1g-dev libssl-dev wget tar curl
 # Установка cargo — менеджер сборки Rust
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 # После установки, добавьте cargo в PATH:
