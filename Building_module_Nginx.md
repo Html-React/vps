@@ -37,7 +37,8 @@ https://github.com/nginx/nginx-acme
 ```
 cd /usr/local/src
 mkdir -p nginx-acme-module
-wget http://github.com/nginx/nginx-acme/releases/download/v0.1.1/nginx-acme-0.1.1.tar.gz
+wget https://github.com/nginx/nginx-acme/releases/download/v0.1.1/nginx-acme-0.1.1.tar.gz # старая версия 
+wget https://github.com/nginx/nginx-acme/releases/download/v0.3.0/nginx-acme-0.3.0.tar.gz # новая версия
 tar -xzvf nginx-acme-0.1.1.tar.gz -C nginx-acme-module --strip-components=1
 ```
 Теперь исходники модуля находятся в /usr/local/src/nginx-acme-module.
