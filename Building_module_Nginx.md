@@ -90,6 +90,12 @@ sudo nginx -t
 sudo systemctl restart nginx
 sudo systemctl status nginx
 ```
+## Создание папкт www
+```
+mkdir -p /var/www
+chown -R www-data:www-data /var/www
+chmod 755 /var/www
+```
 
 ## Дополнительно
 Если systemctl status nginx выдает ошибку "nginx.service: Can't open PID file /run/nginx.pid (yet?) after start: Operation not permitted"
