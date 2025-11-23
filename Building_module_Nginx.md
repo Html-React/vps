@@ -34,20 +34,12 @@ cd /usr/local/src/nginx-1.29.3
             --http-log-path=/var/log/nginx/access.log \
             --with-http_ssl_module \
             --with-pcre
-```
 
-- Добавляем репозиторий:
-```
-echo "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] http://nginx.org/packages/ubuntu `lsb_release -cs` nginx" | sudo tee /etc/apt/sources.list.d/nginx.list
-echo "deb-src [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] http://nginx.org/packages/ubuntu `lsb_release -cs` nginx" | sudo tee -a /etc/apt/sources.list.d/nginx.list
-```
-- Обновляем списки пакетов
-```
-apt update
-```
-- Устанавливаем Nginx
-```
-apt install nginx -y
+make
+
+sudo make install
+
+nginx -v
 ```
 
 ## 2. Скачать исходники Nginx
