@@ -17,6 +17,9 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh # нажать en
 source $HOME/.cargo/env
 cargo --version
 rustc --version
+mkdir -p /var/lib/nginx/acme
+chown -R www-data:www-data /var/lib/nginx
+chmod 750 /var/lib/nginx/acme
 ```
 
 ## 1.1 Установить последний nginx 
