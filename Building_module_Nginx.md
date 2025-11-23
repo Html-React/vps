@@ -22,8 +22,18 @@ rustc --version
 ## 1.1 Установить последний nginx 
 Импортируем ключ:
 ```
-curl -fsSL https://nginx.org/keys/nginx_signing.key | sudo gpg --dearmor -o /usr/share/keyrings/nginx-archive-keyring.gpg
+apt update
 
+apt install build-essential libpcre3 libpcre3-dev zlib1g zlib1g-dev libssl-dev -y
+
+cd /usr/local/src/nginx-1.29.3
+
+./configure --sbin-path=/usr/sbin/nginx \
+            --conf-path=/etc/nginx/nginx.conf \
+            --error-log-path=/var/log/nginx/error.log \
+            --http-log-path=/var/log/nginx/access.log \
+            --with-http_ssl_module \
+            --with-pcre
 ```
 
 - Добавляем репозиторий:
