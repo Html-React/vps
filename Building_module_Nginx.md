@@ -19,6 +19,27 @@ cargo --version
 rustc --version
 ```
 
+## 1.1 Установить последний nginx 
+Импортируем ключ:
+```
+curl -fsSL https://nginx.org/keys/nginx_signing.key | sudo gpg --dearmor -o /usr/share/keyrings/nginx-archive-keyring.gpg
+
+```
+
+- Добавляем репозиторий:
+```
+echo "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] http://nginx.org/packages/ubuntu `lsb_release -cs` nginx" | sudo tee /etc/apt/sources.list.d/nginx.list
+echo "deb-src [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] http://nginx.org/packages/ubuntu `lsb_release -cs` nginx" | sudo tee -a /etc/apt/sources.list.d/nginx.list
+```
+- Обновляем списки пакетов
+```
+apt update
+```
+- Устанавливаем Nginx
+```
+apt install nginx -y
+```
+
 ## 2. Скачать исходники Nginx
 
 Скачайте исходники версии Nginx, под которую нужно собрать модуль.
