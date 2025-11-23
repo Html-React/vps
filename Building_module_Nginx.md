@@ -46,7 +46,7 @@ tar -xzvf nginx-acme-0.3.0.tar.gz -C nginx-acme-module --strip-components=1
 
 ```
 # Сборка модуля
-cd /usr/local/src/nginx-1.29.2
+cd /usr/local/src/nginx-1.29.3
 # Отчистка от старых версий
 make clean 
 ./configure --with-compat --add-dynamic-module=/usr/local/src/nginx-acme-module/ --with-http_ssl_module
