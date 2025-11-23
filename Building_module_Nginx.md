@@ -26,8 +26,8 @@ rustc --version
 
 ```
 cd /usr/local/src
-wget http://nginx.org/download/nginx-1.29.2.tar.gz
-tar zxvf nginx-1.29.2.tar.gz
+wget https://nginx.org/download/nginx-1.29.3.tar.gz
+tar zxvf nginx-1.29.3.tar.gz
 ```
 
 ## 3. Сборка модуля ACME (готовый блок команд)
