@@ -31,12 +31,14 @@ apt install build-essential libpcre3 libpcre3-dev zlib1g zlib1g-dev libssl-dev -
 
 cd /usr/local/src/nginx-1.29.3
 
-./configure --sbin-path=/usr/sbin/nginx \
-            --conf-path=/etc/nginx/nginx.conf \
-            --error-log-path=/var/log/nginx/error.log \
-            --http-log-path=/var/log/nginx/access.log \
-            --with-http_ssl_module \
-            --with-pcre
+./configure \
+ --sbin-path=/usr/sbin/nginx \
+ --conf-path=/etc/nginx/nginx.conf \
+ --error-log-path=/var/log/nginx/error.log \
+ --http-log-path=/var/log/nginx/access.log \
+ --with-http_ssl_module \
+ --with-http_v2_module \
+ --with-pcre
 
 make
 
