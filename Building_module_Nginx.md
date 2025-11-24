@@ -182,3 +182,174 @@ chmod 755 /var/www
 [Service]
 ExecStartPost=/bin/sleep 1
 ```
+
+## Ниже полный bash-скрипт (готов к запуску от root на Ubuntu 24.04) который:
+
+- удаляет пакеты nginx из apt (чтобы не было конфликтов),
+
+- устанавливает все зависимости (включая Rust/Cargo для nginx-acme-module),
+
+- скачивает и собирает OpenSSL (версию ≥ 3.5.1 рекомендовано для QUIC/HTTP/3 — иначе используем слой совместимости), nginx.org,
+
+- скачивает и собирает nginx 1.29.3 со включёнными http_v2 и http_v3 (HTTP/3/QUIC), ssl, pcre, threads, file-aio, compat и т.д.; подключает OpenSSL собранный локально,
+
+- подключает и собирает nginx-acme-module как динамический модуль (или компилирует модуль отдельно и копирует),
+
+- создаёт нужные каталоги (/var/www, /var/lib/nginx/acme), проверяет/создаёт пользователя www-data и выставляет права,
+
+- ставит systemd unit и запускает сервис.
+
+- Перед запуском: внимательно прочитайте скрипт. HTTP/3 требует либо OpenSSL с поддержкой QUIC (рекомендуется 3.5.1+)
+```
+#!/usr/bin/env bash
+set -euo pipefail
+
+NGINX_VER="1.29.3"
+OPENSSL_VER="openssl-3.5.1"   # рекомендуемая минимальная версия для QUIC (можно изменить)
+OPENSSL_TARBALL="openssl-3.5.1.tar.gz"
+WORKDIR="/usr/local/src"
+NGINX_SRC_DIR="${WORKDIR}/nginx-${NGINX_VER}"
+NGINX_ACME_REPO="https://github.com/nginx-modules/ngx_http_acme_module.git"
+NGINX_ACME_DIR="${WORKDIR}/nginx-acme-module"
+MAKE_JOBS=$(nproc)
+
+echo "1) Остановка и удаление apt-пакетов nginx (если есть)"
+systemctl stop nginx >/dev/null 2>&1 || true
+apt remove --purge -y nginx nginx-common nginx-core nginx-full || true
+apt autoremove -y
+
+echo "2) Установка зависимостей для сборки (компилятор, dev-библиотеки, rust/cargo и т.д.)"
+apt update
+DEPS="build-essential ca-certificates curl git cmake pkg-config libpcre3 libpcre3-dev zlib1g zlib1g-dev libssl-dev libcurl4-openssl-dev libjansson-dev ca-certificates nasm"
+# Rust / cargo for the acme module (if not installed, install via rustup)
+apt install -y $DEPS curl
+
+# Install rustup if cargo not present
+if ! command -v cargo >/dev/null 2>&1; then
+  echo "Installing Rust toolchain (rustup)..."
+  curl https://sh.rustup.rs -sSf | sh -s -- -y
+  export PATH="$HOME/.cargo/bin:$PATH"
+fi
+
+echo "3) Создаём рабочие каталоги"
+mkdir -p "$WORKDIR"
+cd "$WORKDIR"
+
+echo "4) Скачиваем исходники nginx и nginx-acme-module"
+if [ ! -d "$NGINX_SRC_DIR" ]; then
+  wget -c "https://nginx.org/download/nginx-${NGINX_VER}.tar.gz"
+  tar xzf "nginx-${NGINX_VER}.tar.gz"
+fi
+
+if [ ! -d "$NGINX_ACME_DIR" ]; then
+  git clone --depth=1 "$NGINX_ACME_REPO" "$NGINX_ACME_DIR"
+fi
+
+echo "5) Загружаем и собираем OpenSSL ${OPENSSL_VER} локально (для QUIC/HTTP3 рекомендуется >=3.5.1)"
+cd "$WORKDIR"
+if [ ! -f "${OPENSSL_TARBALL}" ]; then
+  wget -c "https://www.openssl.org/source/${OPENSSL_TARBALL}"
+fi
+
+if [ ! -d "${WORKDIR}/${OPENSSL_VER}" ]; then
+  tar xzf "${OPENSSL_TARBALL}"
+fi
+
+# Сборка OpenSSL
+cd "${WORKDIR}/${OPENSSL_VER}"
+./config no-shared --prefix="${WORKDIR}/${OPENSSL_VER}-build" --openssldir="${WORKDIR}/${OPENSSL_VER}-build"
+make -j"$MAKE_JOBS"
+make install_sw
+
+OPENSSL_BUILD_DIR="${WORKDIR}/${OPENSSL_VER}-build"
+
+echo "6) Конфигурация nginx с http2 и http3 и подключением локального OpenSSL"
+cd "$NGINX_SRC_DIR"
+
+# Опции, которые вы указали и рекомендуем дополнительно
+CONFIG_FLAGS=(
+  "--sbin-path=/usr/sbin/nginx"
+  "--conf-path=/etc/nginx/nginx.conf"
+  "--error-log-path=/var/log/nginx/error.log"
+  "--http-log-path=/var/log/nginx/access.log"
+  "--with-http_ssl_module"
+  "--with-http_v2_module"
+  "--with-http_v3_module"
+  "--with-threads"
+  "--with-file-aio"
+  "--with-compat"
+  "--with-pcre"
+  "--with-http_realip_module"
+  "--with-http_gzip_static_module"
+  "--with-http_stub_status_module"
+  "--with-stream"
+  "--with-stream_ssl_module"
+  "--with-cc-opt='-O2 -g'"
+  "--with-ld-opt='-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,-z,now'"
+  "--with-openssl=${OPENSSL_BUILD_DIR}/.."
+)
+
+# Note: --with-openssl expects path to the OpenSSL source directory; we put openssl source in WORKDIR/openssl-3.5.1
+# ensure the source directory name matches OPENSSL_VER variable above (openssl-3.5.1)
+./configure "${CONFIG_FLAGS[@]}" --add-dynamic-module="${NGINX_ACME_DIR}"
+# если ./configure падает — читаем ошибку и правим зависимости
+
+echo "7) Сборка nginx"
+make -j"$MAKE_JOBS"
+
+echo "8) Установка (перезапишет /usr/sbin/nginx установленный ранее)"
+make install
+
+echo "9) Сборка и установка динамического модуля ACME (если не был собран как --add-dynamic-module)"
+# Если модуль уже собрался как динамический модуль он будет в objs/ и будет установлен вместе с make install.
+# Но на всякий случай соберём модуль отдельно и скопируем в /usr/lib/nginx/modules
+cd "$NGINX_SRC_DIR"
+make modules || true
+if [ -f objs/ngx_http_acme_module.so ]; then
+  cp -v objs/ngx_http_acme_module.so /usr/lib/nginx/modules/
+fi
+
+echo "10) Создаём нужные каталоги и права"
+mkdir -p /var/www
+mkdir -p /var/lib/nginx/acme
+# Проверяем наличие пользователя www-data, создаём если нужно
+if ! id -u www-data >/dev/null 2>&1; then
+  useradd -r -s /usr/sbin/nologin -d /var/www www-data
+fi
+chown -R www-data:www-data /var/www
+chown -R www-data:www-data /var/lib/nginx
+chmod 750 /var/lib/nginx/acme
+
+echo "11) Устанавливаем systemd unit (если нужен)"
+cat >/etc/systemd/system/nginx.service <<'SYSTEMD_EOF'
+[Unit]
+Description=nginx - high performance web server
+After=network.target remote-fs.target nss-lookup.target
+
+[Service]
+Type=forking
+PIDFile=/run/nginx.pid
+ExecStartPre=/usr/sbin/nginx -t -q
+ExecStart=/usr/sbin/nginx
+ExecReload=/usr/sbin/nginx -s reload
+ExecStop=/usr/sbin/nginx -s quit
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
+SYSTEMD_EOF
+
+systemctl daemon-reload
+systemctl enable nginx
+
+echo "12) Тест конфигурации nginx и запуск"
+nginx -t
+systemctl start nginx
+systemctl status --no-pager nginx
+
+echo "Готово. Проверьте nginx -v и nginx -V, а также логи при ошибках."
+echo "nginx -v:"
+nginx -v || true
+echo "nginx -V:"
+nginx -V || true
+```
