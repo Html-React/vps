@@ -22,30 +22,72 @@ chown -R www-data:www-data /var/lib/nginx
 chmod 750 /var/lib/nginx/acme
 ```
 
-## 1.1 Установить последний nginx 
+## 1.1 Установить последний nginx 1.29.3 
 Импортируем ключ:
 ```
 apt update
 
-apt install build-essential libpcre3 libpcre3-dev zlib1g zlib1g-dev libssl-dev -y
-
-cd /usr/local/src/nginx-1.29.3
-
-./configure \
- --sbin-path=/usr/sbin/nginx \
- --conf-path=/etc/nginx/nginx.conf \
- --error-log-path=/var/log/nginx/error.log \
- --http-log-path=/var/log/nginx/access.log \
- --with-http_ssl_module \
- --with-http_v2_module \
- --with-pcre
-
-make
-
-sudo make install
+apt purge -y nginx nginx-core nginx-common nginx-full && \
+rm -rf /etc/nginx /usr/sbin/nginx /usr/lib/nginx && \
+apt update && \
+apt install -y build-essential libpcre3 libpcre3-dev zlib1g-dev libssl-dev && \
+cd /usr/local/src && \
+wget https://nginx.org/download/nginx-1.29.3.tar.gz && \
+tar xzf nginx-1.29.3.tar.gz && \
+cd nginx-1.29.3 && \
+./configure --sbin-path=/usr/sbin/nginx \
+            --conf-path=/etc/nginx/nginx.conf \
+            --error-log-path=/var/log/nginx/error.log \
+            --http-log-path=/var/log/nginx/access.log \
+            --with-http_ssl_module \
+            --with-http_v2_module \
+            --with-pcre && \
+make && make install && \
+mkdir -p /etc/nginx/conf.d && \
+echo "OK — nginx 1.29.3 установлен из исходников"
 
 nginx -v
+nginx -t
+
+systemctl stop nginx 2>/dev/null
+nginx
 ```
+
+## Создай сервис-файл
+```
+cat >/etc/systemd/system/nginx.service <<'EOF'
+[Unit]
+Description=nginx - high performance web server
+After=network.target
+Wants=network.target
+
+[Service]
+Type=forking
+PIDFile=/run/nginx.pid
+ExecStart=/usr/sbin/nginx
+ExecReload=/usr/sbin/nginx -s reload
+ExecStop=/usr/sbin/nginx -s quit
+Restart=always
+
+# Create PID directory if missing
+ExecStartPre=/bin/mkdir -p /run
+ExecStartPre=/bin/mkdir -p /run/nginx
+ExecStartPre=/bin/chown www-data:www-data /run/nginx
+
+User=www-data
+Group=www-data
+
+[Install]
+WantedBy=multi-user.target
+EOF
+```
+```
+systemctl daemon-reload
+systemctl enable nginx
+systemctl start nginx
+systemctl status nginx
+```
+Убедись, что в /etc/nginx/nginx.conf указано: user  www-data;
 
 ## 2. Скачать исходники Nginx
 
