@@ -353,3 +353,11 @@ nginx -v || true
 echo "nginx -V:"
 nginx -V || true
 ```
+### Скопируй весь этот текст в файл:
+```
+install-nginx.sh
+```
+### и запусти:
+```
+bash install-nginx.sh
+```
