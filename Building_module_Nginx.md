@@ -119,7 +119,6 @@ cd /usr/local/src/nginx-1.29.3
 make clean 
 ./configure --with-compat --add-dynamic-module=/usr/local/src/nginx-acme-module/ --with-http_ssl_module
 make modules
-# Если make modules не запуститься то просто
 make
 cp objs/ngx_http_acme_module.so /usr/lib/nginx/modules/
 
