@@ -35,13 +35,26 @@ cd /usr/local/src && \
 wget https://nginx.org/download/nginx-1.29.3.tar.gz && \
 tar xzf nginx-1.29.3.tar.gz && \
 cd nginx-1.29.3 && \
-./configure --sbin-path=/usr/sbin/nginx \
-            --conf-path=/etc/nginx/nginx.conf \
-            --error-log-path=/var/log/nginx/error.log \
-            --http-log-path=/var/log/nginx/access.log \
-            --with-http_ssl_module \
-            --with-http_v2_module \
-            --with-pcre && \
+./configure \
+--sbin-path=/usr/sbin/nginx \
+--conf-path=/etc/nginx/nginx.conf \
+--error-log-path=/var/log/nginx/error.log \
+--http-log-path=/var/log/nginx/access.log \
+--pid-path=/run/nginx.pid \
+--lock-path=/var/lock/nginx.lock \
+--with-threads \
+--with-file-aio \
+--with-compat \
+--with-pcre \
+--with-pcre-jit \
+--with-http_ssl_module \
+--with-http_v2_module \
+--with-http_v3_module \
+--with-http_stub_status_module \
+--with-http_gzip_static_module \
+--with-http_realip_module \
+--with-http_limit_conn_module \
+--with-http_limit_req_module && \
 make && make install && \
 mkdir -p /etc/nginx/conf.d && \
 echo "OK — nginx 1.29.3 установлен из исходников"
@@ -51,6 +64,32 @@ nginx -t
 
 systemctl stop nginx 2>/dev/null
 nginx
+```
+### Справка Базовые must-have
+```
+# Эти нужны почти всегда:
+--with-http_ssl_module          # HTTPS
+--with-http_v2_module           # HTTP/2
+--with-http_v3_module           # HTTP/3 + QUIC
+--with-threads                  # многопоточность, ускоряет IO
+--with-file-aio                 # ускоряет работу с файлами
+--with-pcre                     # нормальная обработка регулярных выражений
+--with-pcre-jit                 # JIT ускоряет regex в 3–5 раз
+--with-compat                   # совместимость для динамических модулей
+
+# Полезные, безопасные, не создают проблем:
+--with-http_stub_status_module  # статистика /status
+--with-http_realip_module       # если стоишь за Cloudflare / Nginx Proxy
+--with-http_gzip_static_module  # статика *.gz
+--with-http_sub_module          # подмены в теле ответа
+
+Если нужен rate-limit и защита от DDoS:
+--with-http_limit_conn_module
+--with-http_limit_req_module
+
+Если сервер отдаёт большие файлы:
+--with-file-aio
+--with-threads
 ```
 
 ## Создай сервис-файл
