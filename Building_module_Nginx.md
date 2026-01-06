@@ -209,8 +209,8 @@ ExecStartPost=/bin/sleep 1
 #!/usr/bin/env bash
 set -euo pipefail
 
-NGINX_VER="1.29.3" # измениить на текущий релиз
-OPENSSL_VER="openssl-3.5.1"   # рекомендуемая минимальная версия для QUIC (можно изменить на последний релиз)
+NGINX_VER="1.29.3" # рекомендуемая минимальная версия 1.29.0 (можно изменить на последний релиз)
+OPENSSL_VER="openssl-3.5.1"   # рекомендуемая минимальная версия openssl-3.5.1 (можно изменить на последний релиз)
 OPENSSL_TARBALL="${OPENSSL_VER}.tar.gz"
 WORKDIR="/usr/local/src"
 NGINX_SRC_DIR="${WORKDIR}/nginx-${NGINX_VER}"
