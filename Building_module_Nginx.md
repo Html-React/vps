@@ -202,13 +202,16 @@ ExecStartPost=/bin/sleep 1
 - Перед запуском: внимательно прочитайте скрипт. HTTP/3 требует либо OpenSSL с поддержкой QUIC (рекомендуется 3.5.1+)
 
  # !!!!!!!!!!!!!!!!!!!! Скрипт нужно править сборка модуля не отработает ngx_http_acme_module !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ ### relese: 
+ ### https://openssl-library.org/source/ или https://github.com/openssl/openssl/releases/
+ ### https://nginx.org/ или https://github.com/nginx/nginx/releases
 ```
 #!/usr/bin/env bash
 set -euo pipefail
 
-NGINX_VER="1.29.3"
-OPENSSL_VER="openssl-3.5.1"   # рекомендуемая минимальная версия для QUIC (можно изменить)
-OPENSSL_TARBALL="openssl-3.5.1.tar.gz"
+NGINX_VER="1.29.3" # измениить на текущий релиз
+OPENSSL_VER="openssl-3.5.1"   # рекомендуемая минимальная версия для QUIC (можно изменить на последний релиз)
+OPENSSL_TARBALL="${OPENSSL_VER}.tar.gz"
 WORKDIR="/usr/local/src"
 NGINX_SRC_DIR="${WORKDIR}/nginx-${NGINX_VER}"
 NGINX_ACME_REPO="https://github.com/nginx-modules/ngx_http_acme_module.git"
