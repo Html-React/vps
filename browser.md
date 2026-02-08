@@ -26,6 +26,9 @@ Anonymize local IPs exposed by WebRTC → ENABLE
 ## 2️⃣ (Рекомендую) Расширение
 #### Поставь:
 #### WebRTC Leak Prevent
+```
+https://chromewebstore.google.com/detail/webrtc-network-limiter/npeicpdbkakmehahjeeohfdhnlpdklia
+```
 #### Режим:
 #### Prevent WebRTC from leaking local IPs
 #### Use proxy only
