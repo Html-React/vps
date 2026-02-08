@@ -24,8 +24,8 @@ WebRTC IP Handling Policy → Disable non-proxied UDP
 Anonymize local IPs exposed by WebRTC → ENABLE
 ```
 ## 2️⃣ (Рекомендую) Расширение
-####Поставь:
-####WebRTC Leak Prevent
-####Режим:
-####Prevent WebRTC from leaking local IPs
-####Use proxy only
+#### Поставь:
+#### WebRTC Leak Prevent
+#### Режим:
+#### Prevent WebRTC from leaking local IPs
+#### Use proxy only
