@@ -14,8 +14,7 @@ media.peerconnection.ice.no_mdns = false
 #### no_host → не показывает локальные IP
 #### mdns → скрывает LAN
 
-
-
+##
 ## 🌐 Chromium / Chrome / Brave
 ### chrome://flags
 ```
