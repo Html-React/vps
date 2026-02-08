@@ -27,3 +27,7 @@
 
 # Сборка модуля libnginx_acme.so для Nginx
 [Инструкция](Building_module_Nginx.md)
+
+## Дополнительно настройка браузеров если гибрид podkop - vpn
+[Инструкция](Building_module_Nginx.md)
+
